@@ -1,31 +1,75 @@
-Role Name
+etcd
 =========
 
-A brief description of the role goes here.
+This role is intended to deploy `etcd cluster` by install from package manager only.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role is not depend on other role.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+There are required variables.
+* `etcd_templates_dir` (default value is `{{ role_path }}/templates`)
+This variable defines directory where role looks for templates.
+* `etcd_conf_dir` (default value is `/etc/etcd`)
+This variable define directory where config file is pushed to. This directory should be absolute path. This variable depend on distributive:
+** on RedHat-base/like it is `/etc/sysconfig`;
+** on Debian-base/like it is `/etc/default`;
+** on Gentoo it is `/etc/conf.d`;
+* `etcd_conf_file` (default value is `{{ etcd_conf_dir }}/etcd.conf`)
+This file (see `templates/etcd.conf.j2`) contains shell variables for etcd service.
+* `etcd_data_dir` (default value is `/var/lib/etcd`)
+This variable define storage directory.
+* `etcd_client_port` (default value is `2379`)
+This variable defines port for client connections.
+* `etcd_peer_port` (default value is `2380`)
+This variable defines port for peer (cluster members) connections.
+* `etcd_cluster_group` (default value is `etcd_cluster`)
+This variable defines host group.
+* `etcd_initial_cluster_state` (default value is `new`)
+* `etcd_heartbeat_interval` (default value is `100`)
+* `etcd_election_timeout` (default value is `1000`)
+* `etcd_initial_cluster_token` (default value is `etcd_cluster`)
+Last four variables is getting from any documentation and default configs from any distros.
 
-Dependencies
+Other variables is defined in `{{ role_path }}/templates/etcd.conf.j2`.
+
+Dependenciee
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role is dependency for [postgres role](https://sourceforge.net/projects/postgres-ansible-role/)
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+A part of inventory:
+```
+...
+[etcd_group01]
+etcdhost01
+etcdhost02
+etcdhost03
+...
+[etcd_groups:children]
+etcd_group01
+```
+A part of one from any templates (for group `etcd_group01`):
+```
+...
+etcd_cluster_group: etcd_group01
+...
+```
+So part of playbook (for all etcd clusters):
+```
+...
+- hosts: etcd_groups
+  roles:
+    - role: etcd
+...
+```
 
 License
 -------
