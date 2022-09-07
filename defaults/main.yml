@@ -1,2 +1,25 @@
 ---
+
 # defaults file for etcd
+# common variables
+etcd_templates_dir: "{{ role_path }}/templates"
+etcd_conf_dir: "/etc/etcd"
+etcd_conf_file: "{{ etcd_conf_dir }}/etcd.conf"
+etcd_data_dir: "/var/lib/etcd"
+etcd_client_port: "2379"
+etcd_peer_port: "2380"
+etcd_initial_cluster_state: "new"
+etcd_heartbeat_interval: "100"
+etcd_election_timeout: "1000"
+etcd_initial_cluster_token: "etcd_cluster"
+
+# package manager (distro) depended variables
+# apt-depended (Debian-based/like distros)
+etcd_apt_packages: 
+  - etcd
+# portage-depended (Gentoo Linux`)
+etcd_portage_packages: 
+  - etcd
+# yum/dnf-depended (RedHat-based/like distros)
+etcd_yum_packages:
+  - patroni-etcd

@@ -1,0 +1,19 @@
+---
+
+# install and setup etcd on RedHat-based/like distros (dnf package manager)
+- name: install needed packages
+  ansible.builtin.dnf:
+    name: "{{ etcd_yum_packages }}"
+    state: present
+  tags: etcd_install
+
+- name: configure etcd
+  ansible.builtin.template:
+    src: "{{ etcd_templates_dir }}/etcd.conf.j2"
+    dest: "{{ etcd_config_file }}"
+    state: present
+  notify:
+    - etcd enable
+    - etcd start
+  tags: etcd_config
+
