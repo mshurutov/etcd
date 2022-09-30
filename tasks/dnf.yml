@@ -1,9 +1,75 @@
 ---
 
-# install and setup etcd on RedHat-based/like distros (dnf package manager)
+# install and setup etcd on RedHat8+-based/like distros (dnf package manager)
+- name: set user_home variable
+  ansible.builtin.set_fact:
+    user_home: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+  tags: etcd_build
+
+- name: build and put etcd package locally
+  block:
+    - name: check if directories for rpm build is exist
+      ansible.builtin.file:
+        path: "{{ user_home }}/rpmbuild/{{ item }}"
+        state: directory
+      loop:
+        - BUILD
+        - RPMS
+        - SOURCES
+        - SPECS
+        - SRPMS
+      tags: etcd_build
+      run_once: true
+      delegate_to: 127.0.0.1
+    - name: get latest stable version from base etcd repo
+      ansible.builtin.shell: curl -s https://api.github.com/repos/etcd-io/etcd/releases/latest|grep tag_name | cut -d '"' -f 4
+      register: get_version
+      when: not etcd_version is defined
+      run_once: true
+      delegate_to: 127.0.0.1
+      tags: etcd_build
+    - name: set version variable
+      ansible.builtin.set_fact:
+        etcd_version: "{{ get_version.stdout }}"
+      when: not etcd_version is defined
+      run_once: true
+      delegate_to: 127.0.0.1
+      tags: etcd_build
+    - name: get binary file from github
+      ansible.builtin.uri:
+        url: "https://github.com/etcd-io/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz"
+        dest: "{{ user_home }}/rpmbuild/SOURCES"
+      run_once: true
+      delegate_to: 127.0.0.1
+      tags: etcd_build
+    - name: copy templates to {{ user_home }}/rpmbuild/SOURCES
+      ansible.builtin.template:
+        src: "{{ etcd_templates_dir }}/{{ item }}.j2"
+        dest: "{{ user_home }}/rpmbuild/SOURCES/{{ item }}"
+      loop:
+        - etcd.conf
+        - etcd.systemd
+        - etcd.logrotate
+        - etcd.spec
+      run_once: true
+      delegate_to: 127.0.0.1
+      tags: etcd_build
+    - name: build rpm package
+      ansible.builtin.command: rpmbuild -bb {{ user_home }}/rpmbuild/SPECS/etcd.spec"
+      run_once: true
+      delegate_to: 127.0.0.1
+      tags: etcd_build
+  when: etcd_build is defined and etcd_build | bool
+
+- name: copy etcd-{{ etcd_version }}.rpm into remote host
+  ansible.builtin.copy:
+    src: "{{ yum_local_repo }}/etcd-{{ etcd_version }}.rpm"
+    dest: "/tmp/etcd-{{ etcd_version }}.rpm"
+  tags: etcd_install
+
 - name: install needed packages
   ansible.builtin.dnf:
-    name: "{{ etcd_yum_packages }}"
+    name: "/tmp/etcd-{{ etcd_version }}.rpm"
     state: present
   tags: etcd_install
 

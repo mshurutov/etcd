@@ -5,6 +5,7 @@
 etcd_templates_dir: "{{ role_path }}/templates"
 etcd_conf_dir: "/etc/etcd"
 etcd_conf_file: "{{ etcd_conf_dir }}/etcd.conf"
+etcd_bin: "/usr/bin/etcd"
 etcd_data_dir: "/var/lib/etcd"
 etcd_client_port: "2379"
 etcd_peer_port: "2380"
@@ -23,4 +24,4 @@ etcd_portage_packages:
   - etcd
 # yum/dnf-depended (RedHat-based/like distros)
 etcd_yum_packages:
-  - patroni-etcd
+  - etcd
