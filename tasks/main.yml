@@ -3,6 +3,6 @@
 # tasks file for etcd
 # it depends on distros, config file has separate path
 - name: install  and setup etcd
-  ansible.builtin.import_tasks: "{{ ansible_pkg_mgr }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}.yml"
   tags: etcd
 
