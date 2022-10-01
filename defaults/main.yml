@@ -14,14 +14,6 @@ etcd_initial_cluster_state: "new"
 etcd_heartbeat_interval: "100"
 etcd_election_timeout: "1000"
 etcd_initial_cluster_token: "etcd_cluster"
+etcd_packages: 
+  - etcd
 
-# package manager (distro) depended variables
-# apt-depended (Debian-based/like distros)
-etcd_apt_packages: 
-  - etcd
-# portage-depended (Gentoo Linux`)
-etcd_portage_packages: 
-  - etcd
-# yum/dnf-depended (RedHat-based/like distros)
-etcd_yum_packages:
-  - etcd

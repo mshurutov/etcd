@@ -3,7 +3,7 @@
 # install and setup etcd on RedHat-based/like distros (yum package manager)
 - name: install needed packages
   ansible.builtin.yum:
-    name: "{{ etcd_yum_packages }}"
+    name: "{{ etcd_packages }}"
     state: present
   tags: etcd_install
 
