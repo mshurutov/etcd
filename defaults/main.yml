@@ -3,8 +3,8 @@
 # defaults file for etcd
 # common variables
 etcd_templates_dir: "{{ role_path }}/templates"
-etcd_conf_dir: "/etc/etcd"
-etcd_conf_file: "{{ etcd_conf_dir }}/etcd.conf"
+etcd_config_dir: "/etc/etcd"
+etcd_config_file: "{{ etcd_config_dir }}/etcd.conf"
 etcd_bin: "/usr/bin/etcd"
 etcd_data_dir: "/var/lib/etcd"
 etcd_client_port: "2379"

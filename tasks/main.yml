@@ -4,5 +4,5 @@
 # it depends on distros, config file has separate path
 - name: install  and setup etcd
   ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}.yml"
-  tags: etcd
+  tags: etcd_init
 

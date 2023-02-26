@@ -17,8 +17,8 @@ ETCD_NAME="{{ ansible_hostname }}"
 ## Path to the data directory.
 ## default: "${name}.etcd"
 ETCD_DATA_DIR="{{ etcd_data_dir }}"
+{% if etcd_wal_dir is defined %}
 
-{% id defined etcd_wal_dir %}
 ##### --wal-dir
 ## Path to the dedicated wal directory. If this flag is set, etcd will write
 ## the WAL files to the walDir rather than the dataDir. This allows a
@@ -27,22 +27,22 @@ ETCD_DATA_DIR="{{ etcd_data_dir }}"
 ## default: ""
 ETCD_WAL_DIR="{{ etcd_wal_dir  }}"
 {% endif %}
+{% if etcd_snapshot_count is defined %}
 
-{% id defined etcd_snapshot_count %}
 ##### --snapshot-count
 ## Number of committed transactions to trigger a snapshot to disk.
 ## default: "100000"
 ETCD_SNAPSHOT_COUNT="{{ etcd_snapshot_count }}"
 {% endif %}
+{% if etcd_heartbeat_interval is defined %}
 
-{% id defined etcd_heartbeat_interval %}
 ##### --heartbeat-interval
 ## Time (in milliseconds) of a heartbeat interval.
 ## default: "100"
 ETCD_HEARTBEAT_INTERVAL="{{ etcd_heartbeat_interval }}"
 {% endif %}
+{% if etcd_election_timeout is defined %}
 
-{% id defined etcd_election_timeout %}
 ##### --election-timeout
 ## Time (in milliseconds) for an election to timeout. See
 ## /usr/share/doc/etcd-server/tuning.md.gz for details.
@@ -62,7 +62,7 @@ ETCD_ELECTION_TIMEOUT="{{ etcd_election_timeout }}"
 ## default: "http://localhost:2380"
 ## example: "http://10.0.0.1:2380"
 ## invalid example: "http://example.com:2380" (domain name is invalid for binding)
-ETCD_LISTEN_PEER_URLS="http://{{ ansible_hostname }}:{{ etcd_peer_port }}"
+ETCD_LISTEN_PEER_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_peer_port }}"
 
 ##### --listen-client-urls
 ## List of URLs to listen on for client traffic. This flag tells the etcd to
@@ -76,9 +76,9 @@ ETCD_LISTEN_PEER_URLS="http://{{ ansible_hostname }}:{{ etcd_peer_port }}"
 ## default: "http://localhost:2379"
 ## example: "http://10.0.0.1:2379"
 ## invalid example: "http://example.com:2379" (domain name is invalid for binding)
-ETCD_LISTEN_CLIENT_URLS="http://{{ ansible_hostname }}:{{ etcd_client_port }},http://127.0.0.1:{{ etcd_client_port }}"
+ETCD_LISTEN_CLIENT_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_client_port }},http://127.0.0.1:{{ etcd_client_port }}"
+{% if etcd_max_snapshots is defined %}
 
-{% id defined etcd_max_snapshots %}
 ##### --max-snapshots
 ## Maximum number of snapshot files to retain (0 is unlimited)
 ## The default for users on Windows is unlimited, and manual purging down to 5
@@ -86,8 +86,8 @@ ETCD_LISTEN_CLIENT_URLS="http://{{ ansible_hostname }}:{{ etcd_client_port }},ht
 ## default: 5
 ETCD_MAX_SNAPSHOTS="{{ etcd_max_snapshots }}"
 {% endif %}
+{% if etcd_max_wals is defined %}
 
-{% id defined etcd_max_wals %}
 ##### --max-wals
 ## Maximum number of wal files to retain (0 is unlimited)
 ## The default for users on Windows is unlimited, and manual purging down to 5
@@ -95,74 +95,74 @@ ETCD_MAX_SNAPSHOTS="{{ etcd_max_snapshots }}"
 ## default: 5
 ETCD_MAX_WALS="{{ etcd_max_wals }}"
 {% endif %}
+{% if etcd_cors is defined %}
 
-{% id defined etcd_cors %}
 ##### --cors
 ## Comma-separated white list of origins for CORS (cross-origin resource
 ## sharing).
 ## default: none
 ETCD_CORS="{{ etcd_cors  }}"
 {% endif %}
+{% if etcd_quota_backend_bytes is defined %}
 
-{% id defined etcd_quota_backend_bytes %}
 #### --quota-backend-bytes
 ## Raise alarms when backend size exceeds the given quota (0 defaults to low
 ## space quota).
 ## default: 0
 ETCD_QUOTA_BACKEND_BYTES="{{ etcd_quota_backend_bytes }}"
 {% endif %}
+{% if etcd_backend_batch_limit is defined %}
 
-{% id defined etcd_backend_batch_limit %}
 #### --backend-batch-limit
 ## BackendBatchLimit is the maximum operations before commit the backend
 ## transaction.
 ## default: 0
 ETCD_BACKEND_BATCH_LIMIT="{{ etcd_backend_batch_limit }}"
 {% endif %}
+{% if etcd_backend_batch_interval is defined %}
 
-{% id defined etcd_backend_batch_interval %}
 #### --backend-batch-interval
 ## BackendBatchInterval is the maximum time before commit the backend
 ## transaction.
 ## default: 0
 ETCD_BACKEND_BATCH_INTERVAL="{{ etcd_backend_batch_interval }}"
 {% endif %}
+{% if etcd_max_txn_ops is defined %}
 
-{% id defined etcd_max_txn_ops %}
 #### --max-txn-ops
 ## Maximum number of operations permitted in a transaction.
 ## default: 128
 ETCD_MAX_TXN_OPS="{{ etcd_max_txn_ops }}"
 {% endif %}
+{% if etcd_max_request_bytes is defined %}
 
-{% id defined etcd_max_request_bytes %}
 #### --max-request-bytes
 ## Maximum client request size in bytes the server will accept.
 ## default: 1572864
 ETCD_MAX_REQUEST_BYTES="{{ etcd_max_request_bytes }}"
 {% endif %}
+{% if etcd_grpc_keepalive_min_time is defined %}
 
-{% id defined etcd_grpc_keepalive_min_time %}
 #### --grpc-keepalive-min-time
 ## Minimum duration interval that a client should wait before pinging server.
 ## default: 5s
 ETCD_GRPC_KEEPALIVE_MIN_TIME="{{ etcd_grpc_keepalive_min_time }}"
 {% endif %}
+{% if etcd_grpc_keepalive_interval is defined %}
 
-{% id defined etcd_grpc_keepalive_interval %}
 #### --grpc-keepalive-interval
 ## Frequency duration of server-to-client ping to check if a connection is
 ## alive (0 to disable).
 ## default: 2h
 ETCD_GRPC_KEEPALIVE_INTERVAL="{{ etcd_grpc_keepalive_interval }}"
 {% endif %}
+{% if etcd_grpc_keepalive_timeout is defined %}
 
-{% id defined etcd_grpc_keepalive_timeout %}
 #### --grpc-keepalive-timeout
 ## Additional duration of wait before closing a non-responsive connection
 ## (0 to disable).
 ## default: 20s
-ETCD_GRPC_KEEPALIVE_TIMEOUT="{{  }}"
+ETCD_GRPC_KEEPALIVE_TIMEOUT="{{ etcd_grpc_keepalive_timeout }}"
 {% endif %}
 
 
@@ -182,7 +182,7 @@ ETCD_GRPC_KEEPALIVE_TIMEOUT="{{  }}"
 ## domain names.
 ## default: "http://localhost:2380"
 ## example: "http://example.com:2380, http://10.0.0.1:2380"
-ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_hostname }}:{{ etcd_peer_port }}"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_host }}:{{ etcd_peer_port }}"
 
 ##### --initial-cluster
 ## Initial cluster configuration for bootstrapping.
@@ -190,7 +190,7 @@ ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_hostname }}:{{ etcd_peer_por
 ## default uses `default` for the key because this is the default for the
 ## `--name` flag.
 ## default: "default=http://localhost:2380"
-ETCD_INITIAL_CLUSTER="{% for host in groups[etcd_cluster_group] %}{{ hostvars[host]['ansible_hostname'] }}=http://{{ hostvars[host]['inventory_hostname'] }}:{{ etcd_peer_port }}{% if not loop.last %},{% endif %}{% endfor %}"
+ETCD_INITIAL_CLUSTER="{% for host in groups[etcd_cluster_group] %}{{ hostvars[host]['ansible_hostname'] }}=http://{{ hostvars[host]['ansible_host'] }}:{{ etcd_peer_port }}{% if not loop.last %},{% endif %}{% endfor %}"
 ##### --initial-cluster-state
 ## Initial cluster state ("new" or "existing"). Set to `new` for all members
 ## present during initial static or DNS bootstrapping. If this option is set to
@@ -213,53 +213,53 @@ ETCD_INITIAL_CLUSTER_TOKEN="{{ etcd_initial_cluster_token }}"
 ## file descriptors) are eventually depleted.
 ## default: "http://localhost:2379"
 ## example: "http://example.com:2379, http://10.0.0.1:2379"
-ETCD_ADVERTISE_CLIENT_URLS="{{ ansible_hostname }}:{{ etcd_client_port }}"
+ETCD_ADVERTISE_CLIENT_URLS="http://{{ ansible_host }}:{{ etcd_client_port }}"
+{% if etcd_discovery is defined %}
 
-{% id defined etcd_discovery %}
 ##### --discovery
 ## Discovery URL used to bootstrap the cluster.
 ## default: none
 ETCD_DISCOVERY="{{ etcd_discovery }}"
 {% endif %}
+{% if etcd_discovery_srv is defined %}
 
-{% id defined etcd_discovery_srv %}
 ##### --discovery-srv
 ## DNS srv domain used to bootstrap the cluster.
 ## default: none
 ETCD_DISCOVERY_SRV="{{ etcd_discovery_srv }}"
 {% endif %}
+{% if etcd_discovery_fallback is defined %}
 
-{% id defined etcd_discovery_fallback %}
 ##### --discovery-fallback
 ## Expected behavior ("exit" or "proxy") when discovery services fails. "proxy"
 ## supports v2 API only.
 ## default: "proxy"
 ETCD_DISCOVERY_FALLBACK="{{ etcd_discovery_fallback }}"
 {% endif %}
+{% if etcd_discovery_proxy is defined %}
 
-{% id defined etcd_discovery_proxy %}
 ##### --discovery-proxy
 ## HTTP proxy to use for traffic to discovery service.
 ## default: none
 ETCD_DISCOVERY_PROXY="{{ etcd_discovery_proxy }}"
 {% endif %}
+{% if etcd_strict_reconfig_check is defined %}
 
-{% id defined etcd_strict_reconfig_check %}
 ##### --strict-reconfig-check
 ## Reject reconfiguration requests that would cause quorum loss.
 ## default: false
 ETCD_STRICT_RECONFIG_CHECK="{{ etcd_strict_reconfig_check }}"
 {% endif %}
+{% if etcd_auto_compaction_retention is defined %}
 
-{% id defined etcd_auto_compaction_retention %}
 ##### --auto-compaction-retention
 ## Auto compaction retention for mvcc key value store in hour. 0 means disable
 ## auto compaction.
 ## default: 0
 ETCD_AUTO_COMPACTION_RETENTION="{{ etcd_auto_compaction_retention }}"
 {% endif %}
+{% if etcd_enable_v2 is defined %}
 
-{% id defined etcd_enable_v2 %}
 ##### --enable-v2
 ## Accept etcd V2 client requests
 ## default: true
@@ -268,47 +268,47 @@ ETCD_ENABLE_V="{{ etcd_enable_v2 }}"
 
 
 ### Proxy flags
+{% if etcd_proxy is defined %}
 
 # `--proxy` prefix flags configures etcd to run in proxy mode. "proxy" supports
 # v2 API only.
 
-{% id defined etcd_proxy %}
 ##### --proxy
 ## Proxy mode setting ("off", "readonly" or "on").
 ## default: "off"
 ETCD_PROXY="{{ etcd_proxy }}"
 {% endif %}
+{% if etcd_proxy_failure_wait is defined %}
 
-{% id defined etcd_proxy_failure_wait %}
 ##### --proxy-failure-wait
 ## Time (in milliseconds) an endpoint will be held in a failed state before
 ## being reconsidered for proxied requests.
 ## default: 5000
 ETCD_PROXY_FAILURE_WAIT="{{ etcd_proxy_failure_wait }}"
 {% endif %}
+{% if etcd_proxy_refresh_interval is defined %}
 
-{% id defined etcd_proxy_refresh_interval %}
 ##### --proxy-refresh-interval
 ## Time (in milliseconds) of the endpoints refresh interval.
 ## default: 30000
 ETCD_PROXY_REFRESH_INTERVAL="{{ etcd_proxy_refresh_interval }}"
 {% endif %}
+{% if etcd_proxy_dial_timeout is defined %}
 
-{% id defined etcd_proxy_dial_timeout %}
 ##### --proxy-dial-timeout
 ## Time (in milliseconds) for a dial to timeout or 0 to disable the timeout
 ## default: 1000
 ETCD_PROXY_DIAL_TIMEOUT="{{ etcd_proxy_dial_timeout }}"
 {% endif %}
+{% if etcd_proxy_write_timeout is defined %}
 
-{% id defined etcd_proxy_write_timeout %}
 ##### --proxy-write-timeout
 ## Time (in milliseconds) for a write to timeout or 0 to disable the timeout.
 ## default: 5000
 ETCD_PROXY_WRITE_TIMEOUT="{{ etcd_proxy_write_timeout }}"
 {% endif %}
+{% if etcd_proxy_read_timeout is defined %}
 
-{% id defined etcd_proxy_read_timeout %}
 ##### --proxy-read-timeout
 ## Time (in milliseconds) for a read to timeout or 0 to disable the timeout.
 ## Don't change this value if using watches because use long polling requests.
@@ -318,110 +318,110 @@ ETCD_PROXY_READ_TIMEOUT="{{ etcd_proxy_read_timeout }}"
 
 
 ### Security flags
+{% if etcd_cert_file is defined %}
 
 # The security flags help to build a secure etcd cluster.
 
-{% id defined etcd_cert_file %}
 ##### --cert-file
 ## Path to the client server TLS cert file.
 ## default: none
 ETCD_CERT_FILE="{{ etcd_cert_file }}"
 {% endif %}
+{% if etcd_key_file is defined %}
 
-{% id defined etcd_key_file %}
 ##### --key-file
 ## Path to the client server TLS key file.
 ## default: none
 ETCD_KEY_FILE="{{ etcd_key_file }}"
 {% endif %}
+{% if etcd_client_cert_auth is defined %}
 
-{% id defined etcd_client_cert_auth %}
 ##### --client-cert-auth
 ## Enable client cert authentication.
 ## CN authentication is not supported by gRPC-gateway.
 ## default: false
 ETCD_CLIENT_CERT_AUTH="{{ etcd_client_cert_auth }}"
 {% endif %}
+{% if etcd_client_crl_file is defined %}
 
-{% id defined etcd_client_crl_file %}
 #### --client-crl-file
 ## Path to the client certificate revocation list file.
 ## default: ""
 ETCD_CLIENT_CRL_FILE="{{ etcd_client_crl_file }}"
 {% endif %}
+{% if etcd_trusted_ca_file is defined %}
 
-{% id defined etcd_trusted_ca_file %}
 ##### --trusted-ca-file
 ## Path to the client server TLS trusted CA key file.
 ## default: none
 ETCD_TRUSTED_CA_FILE="{{ etcd_trusted_ca_file }}"
 {% endif %}
+{% if etcd_auto_tls is defined %}
 
-{% id defined etcd_auto_tls %}
 ##### --auto-tls
 ## Client TLS using generated certificates
 ## default: false
 ETCD_AUTO_TLS="{{ etcd_auto_tls }}"
 {% endif %}
+{% if etcd_peer_cert_file is defined %}
 
-{% id defined etcd_peer_cert_file %}
 ##### --peer-cert-file
 ## Path to the peer server TLS cert file.
 ## default: none
 ETCD_PEER_CERT_FILE="{{ etcd_peer_cert_file }}"
 {% endif %}
+{% if etcd_peer_key_file is defined %}
 
-{% id defined etcd_peer_key_file %}
 ##### --peer-key-file
 ## Path to the peer server TLS key file.
 ## default: none
 ETCD_PEER_KEY_FILE="{{ etcd_peer_key_file }}"
 {% endif %}
+{% if etcd_peer_client_cert_auth is defined %}
 
-{% id defined etcd_peer_client_cert_auth %}
 ##### --peer-client-cert-auth
 ## Enable peer client cert authentication.
 ## default: false
 ETCD_PEER_CLIENT_CERT_AUTH="{{ etcd_peer_client_cert_auth }}"
 {% endif %}
+{% if etcd_peer_crl_file is defined %}
 
-{% id defined etcd_peer_crl_file %}
 #### --peer-crl-file
 ## Path to the peer certificate revocation list file.
 ## default: ""
 ETCD_PEER_CRL_FILE="{{ etcd_peer_crl_file }}"
 {% endif %}
+{% if etcd_peer_trusted_ca_file is defined %}
 
-{% id defined etcd_peer_trusted_ca_file %}
 ##### --peer-trusted-ca-file
 ## Path to the peer server TLS trusted CA file.
 ## default: none
 ETCD_PEER_TRUSTED_CA_FILE="{{ etcd_peer_trusted_ca_file }}"
 {% endif %}
 
-{% id defined etcd_peer_auto_tls %}
+{% if etcd_peer_auto_tls is defined %}
 ##### --peer-auto-tls
 ## Peer TLS using generated certificates
 ## default: false
 ETCD_PEER_AUTO_TLS="{{ etcd_peer_auto_tls }}"
 {% endif %}
+{% if etcd_peer_cert_allowed_cn is defined %}
 
-{% id defined etcd_peer_cert_allowed_cn %}
 #### --peer-cert-allowed-cn
 ## Allowed CommonName for inter peer authentication.
 ## default: none
 ETCD_PEER_CERT_ALLOWED_CN="{{ etcd_peer_cert_allowed_cn }}"
 {% endif %}
+{% if etcd_cipher_suites is defined %}
 
-{% id defined etcd_cipher_suites %}
 #### --cipher-suites
 ## Comma-separated list of supported TLS cipher suites between server/client and
 ## peers.
 ## default: ""
 ETCD_CIPHER_SUITES="{{ etcd_cipher_suites }}"
 {% endif %}
+{% if etcd_experimental_peer_skip_client_san_verification is defined %}
 
-{% id defined etcd_experimental_peer_skip_client_san_verification %}
 #### --experimental-peer-skip-client-san-verification
 ## Skip verification of SAN field in client certificate for peer connections.
 ## default: false
@@ -430,38 +430,38 @@ ETCD_EXPERIMENTAL_PEER_SKIP_CLIENT_SAN_VERIFICATION="{{ etcd_experimental_peer_s
 
 
 ### Logging flags
+{% if etcd_log_outputs is defined %}
 
-{% id defined etcd_log_outputs %}
 #### --log-outputs
 ## Specify 'stdout' or 'stderr' to skip journald logging even when running
 ## under systemd, or list of comma separated output targets.
 ## default: default
 ETCD_LOG_OUTPUTS="{{ etcd_log_outputs }}"
 {% endif %}
+{% if etcd_debug is defined %}
 
-{% id defined etcd_debug %}
 ##### --debug
 ## Drop the default log level to DEBUG for all subpackages.
 ## default: false (INFO for all packages)
 ETCD_DEBUG="{{ etcd_debug }}"
 {% endif %}
+{% if etcd_log_package_levels is defined %}
 
-{% id defined etcd_log_package_levels %}
 ##### --log-package-levels
 ## Set individual etcd subpackages to specific log levels. An example being
 ## `etcdserver=WARNING,security=DEBUG`
 ## default: none (INFO for all packages)
 ETCD_LOG_PACKAGE_LEVELS="{{ etcd_log_package_levels }}"
 {% endif %}
+{% if etcd_unsafe_flags is defined %}
 
-{% id defined etcd_unsafe_flags %}
 ### Unsafe flags
 
 # Please be CAUTIOUS when using unsafe flags because it will break the guarantees given by the consensus protocol.
 # For example, it may panic if other members in the cluster are still alive.
 # Follow the instructions when using these flags.
+{% if etcd_force_new_cluster is defined %}
 
-{% id defined etcd_force_new_cluster %}
 ##### --force-new-cluster
 ## Force to create a new one-member cluster. It commits configuration changes
 ## forcing to remove all existing members in the cluster and add itself. It needs
