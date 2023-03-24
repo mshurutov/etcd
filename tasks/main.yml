@@ -6,3 +6,9 @@
   ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}.yml"
   tags: etcd_init
 
+- name: configure etcd
+  ansible.builtin.template:
+    src: "{{ etcd_templates_dir }}/etcd.conf.j2"
+    dest: "{{ etcd_config_file }}"
+  notify: etcd restart
+  tags: etcd_config
