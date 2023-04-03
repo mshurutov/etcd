@@ -4,19 +4,37 @@
 # You need create and setup local dnf repo, create rpm package for etcd
 # and put this package into local repo. Before use etcd you should add local repo
 # into etcd hosts
+- name: install local repo for etcd
+  ansible.builtin.yum_repository:
+    baseurl: 'http://srv01.mshurutov.home/repos/rpm/x86_64'
+    description: 'local repo for RedHat-like distros'
+    name: "local_repo"
+    enabled: true
+    gpgcheck: false
+  tags: etcd_install
+
 - name: install needed packages
   ansible.builtin.dnf:
     name: "{{ etcd_packages }}"
-    state: present
+    state: latest
   tags: etcd_install
 
 - name: configure etcd
   ansible.builtin.template:
     src: "{{ etcd_templates_dir }}/etcd.conf.j2"
     dest: "{{ etcd_config_file }}"
-    state: present
   notify:
     - etcd enable
     - etcd start
   tags: etcd_config
 
+- name: enable etcd port in firewalld
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop:
+    - 2379
+    - 2380
+  tags: etcd_config
