@@ -16,4 +16,3 @@ etcd_election_timeout: "1000"
 etcd_initial_cluster_token: "etcd_cluster"
 etcd_packages: 
   - etcd
-

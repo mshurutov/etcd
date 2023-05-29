@@ -1,7 +1,10 @@
-etcd
+[TOC]
+
+Role: etcd
 =========
 
 This role is intended to deploy `etcd cluster` by install from package manager only.
+
 Copyright (C) 2023  Mikhail Shurutov
 
 This program is free software; you can redistribute it and/or
@@ -47,10 +50,17 @@ Last four variables is getting from any documentation and default configs from a
 
 Other variables is defined in `{{ role_path }}/templates/etcd.conf.j2`.
 
+If you use RedHat-based distribution you should define follow variables:
+* `etcd_dnf_repo_uri`
+* `etcd_dnf_repo_description`
+* `etcd_dnf_repo_name`
+* `etcd_dnf_repo_gpgcheck`
+ 
+
 Dependenciee
 ------------
 
-This role is dependency for [postgres role](https://sourceforge.net/projects/postgres-ansible-role/)
+This role is dependency for mshurutov.postgres role.
 
 Example Playbook
 ----------------

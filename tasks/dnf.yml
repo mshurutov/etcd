@@ -6,11 +6,11 @@
 # into etcd hosts
 - name: install local repo for etcd
   ansible.builtin.yum_repository:
-    baseurl: 'http://srv01.mshurutov.home/repos/rpm/x86_64'
-    description: 'local repo for RedHat-like distros'
-    name: "local_repo"
+    baseurl: "{{ etcd_dnf_repo_uri }}"
+    description: "{{ etcd_dnf_repo_description }}"
+    name: "{{ etcd_dnf_repo_name }}"
     enabled: true
-    gpgcheck: false
+    gpgcheck: "{{ etcd_dnf_repo_gpgcheck }}"
   tags: etcd_install
 
 - name: install needed packages
