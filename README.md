@@ -62,34 +62,76 @@ Dependenciee
 
 This role is dependency for mshurutov.postgres role.
 
-Example Playbook
+Using a Role
 ----------------
 
+### Variables Used
+
+* `ANSIBLE_ROOT_DIR` is path for static content: roles,configs,etc, for example: /data/ansible
+* `ANSIBLE_ROOT_ROLE_DIR` is path in `roles_path` config variable, for example: /data/ansible/roles  
+Content of my ~/.ansible.cfg:
+```
+...
+# additional paths to search for roles in, colon separated
+#roles_path    = /etc/ansible/roles
+roles_path    = /data/ansible/roles
+...
+```
+
+### Install role
+#### GIT repo
+
+    user@host ~ $ cd $ANSIBLE_ROOT_ROLE_DIR
+    user@host roles $ git clone https://shurutov@git.code.sf.net/p/etcd-role/code etcd
+
+#### Ansible galaxy
+##### Installation from command
+
+    user@host ~ $ cd $ANSIBLE_ROOT_DIR
+    user@host ansible $ ansible-galaxy role install mshurutov.etcd -p roles
+
+##### Installation from requirements.yml
+
+    user@host ~ $ cd $ANSIBLE_ROOT_DIR
+    user@host ansible $ grep etcd requirements.yml
+    - name: mshurutov.etcd
+    user@host ansible $ ansible-galaxy role install -r requirements.yml -p roles
+
+### Example Playbook
+
+#### Inventory
 A part of inventory:
 ```
 ...
 [etcd_group01]
 etcdhost01
 etcdhost02
-etcdhost03
 ...
 [etcd_groups:children]
 etcd_group01
-```
-A part of one from any templates (for group `etcd_group01`):
-```
-...
-etcd_cluster_group: etcd_group01
 ...
 ```
-So part of playbook (for all etcd clusters):
+An example of define of etcd cluster group variable
 ```
 ...
-- hosts: etcd_groups
-  roles:
-    - role: etcd
+etcd_cluster_group: "etcd_group01"
 ...
 ```
+#### Role installed as git repo
+
+    ...
+    - hosts: all
+      roles:
+         - role: etcd
+    ...
+
+#### Role installed by ansible-galaxy
+
+    ...
+    - hosts: all
+      roles:
+         - role: mshurutov.etcd
+    ...
 
 License
 -------
@@ -99,4 +141,4 @@ License
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+My name is Mikhail Shurutov, I'm an operations engineer since 1997.
