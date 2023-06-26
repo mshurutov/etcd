@@ -120,7 +120,7 @@ etcd_cluster_group: "etcd_group01"
 #### Role installed as git repo
 
     ...
-    - hosts: all
+    - hosts: etcd_groups
       roles:
          - role: etcd
     ...
@@ -128,7 +128,7 @@ etcd_cluster_group: "etcd_group01"
 #### Role installed by ansible-galaxy
 
     ...
-    - hosts: all
+    - hosts: etcd_groups
       roles:
          - role: mshurutov.etcd
     ...
