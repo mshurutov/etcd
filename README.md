@@ -82,7 +82,7 @@ roles_path    = /data/ansible/roles
 #### GIT repo
 
     user@host ~ $ cd $ANSIBLE_ROOT_ROLE_DIR
-    user@host roles $ git clone https://shurutov@git.code.sf.net/p/etcd-ansible-role/code etcd
+    user@host roles $ git clone https://git.code.sf.net/p/etcd-ansible-role/code etcd
 
 #### Ansible galaxy
 ##### Installation from command
