@@ -10,5 +10,7 @@
   ansible.builtin.template:
     src: "{{ etcd_templates_dir }}/etcd.conf.j2"
     dest: "{{ etcd_config_file }}"
-  notify: etcd restart
+  notify:
+  - etcd enable
+  - etcd restart
   tags: etcd_config
