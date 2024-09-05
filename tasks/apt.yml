@@ -1,7 +1,6 @@
 ---
-
 # install and setup etcd on Debian-based/like distros (apt package manager)
-- name: install needed packages
+- name: Install needed packages
   ansible.builtin.apt:
     name: "{{ etcd_packages }}"
     state: present

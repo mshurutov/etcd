@@ -1,6 +1,6 @@
 ---
 # install etcd on Alt Linux Server
-- name: install needed packages
+- name: Install needed packages
   ansible.builtin.apt_rpm:
     package: "{{ item }}"
     update_cache: true
