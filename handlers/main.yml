@@ -1,28 +1,27 @@
 ---
-
 # handlers file for etcd
-- name: etcd enable
+- name: Etcd enable
   ansible.builtin.service:
     name: etcd
-    enabled: yes
+    enabled: true
 
-- name: etcd start
+- name: Etcd start
   ansible.builtin.service:
     name: etcd
     state: started
 
-- name: etcd stop
+- name: Etcd stop
   ansible.builtin.service:
     name: etcd
     state: stopped
 
-- name: etcd restart
+- name: Etcd restart
   ansible.builtin.service:
     name: etcd
     state: restarted
 
-- name: etcd disable
+- name: Etcd disable
   ansible.builtin.service:
     name: etcd
     state: stopped
-    enabled: no
+    enabled: false

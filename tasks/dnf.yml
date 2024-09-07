@@ -16,6 +16,7 @@
   ansible.builtin.dnf:
     name: "{{ etcd_packages }}"
     state: latest
+    update_only: true
   tags: etcd_install
 
 - name: Enable etcd port in firewalld
