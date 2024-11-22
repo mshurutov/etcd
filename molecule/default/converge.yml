@@ -4,4 +4,4 @@
   tasks:
     - name: "Include etcd"
       include_role:
-        name: "etcd"
+        name: "mshurutov.etcd"

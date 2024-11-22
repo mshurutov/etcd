@@ -4,6 +4,6 @@
   community.general.apt_rpm:
     package: "{{ item }}"
     update_cache: true
-    state: present
+    state: "present_not_latest"
   loop: "{{ etcd_packages }}"
   tags: etcd_install
